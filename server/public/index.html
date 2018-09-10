@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>sample</title>
+    <!-- axios Make http requests from node.js -->
+    <script async src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <!-- bootstrap 4 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="row justify-content-center mt-5">
+			<h1 class="col-md-12 text-center">Text-To-Speech(voice from server)</h1>
+			<p class="col-md-12 text-center">the voice will be in a <b class="text-danger">Russian</b>-English Accent</p>
+			<div class="col-md-4 mt-5">
+				<form id="text-input-form">
+					<label for="text"><b>Input text</b></label>
+					<input id="text" type="text" name="name" class="form-control" required>
+                    <span class="text-danger">Voila, For the response</span>
+                    <br>
+					<button type="submit" class="btn mt-3 col-md-4">Submit</button>
+				</form>
+			</div>
+		</div>
+		<audio id="my-player" class="invisible"></audio>
+	</div>
+<script>
+  ;
+  (function() {
+    'use strict';
+    const formElem = document.querySelector('#text-input-form');
+    const audioElem = document.querySelector('#my-player');
+    formElem.addEventListener('submit', handleSubmit);
+
+    async function handleSubmit(event) {
+        event.preventDefault();
+        const text = formElem[0].value;
+        try {
+            const resposne = await axios.post('/input', { text });
+            audioElem.src = resposne.data.fileName;
+            audioElem.play();
+        } catch (error) {
+            console.error(error);
+        }
+    }
+  })();
+</script>
+</body>
+</html>
